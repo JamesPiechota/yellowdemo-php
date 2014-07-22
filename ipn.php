@@ -1,5 +1,15 @@
 <?php
 
+
+// Entry point for the IPN callback. An example approach would be to:
+// 1. Grab the invoice id and status from the POST request
+// 2. Query the order management system for an order matching the invoice
+// 3a. If the status is 'unconfirmed' flag the order as
+//     'pending confirmation' and redirect the customer to an order
+//     complete page
+// 3b. If the status is 'paid' flag th order as 'complete' and ship the
+//     the product
+    
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 		    // ipn should only be POSTed
     http_response_code(400);
