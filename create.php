@@ -12,7 +12,7 @@
         <div class="cover-container">
           <div class="inner cover">
             <h1 class="cover-heading">Create an invoice:</h1>
-            <form class='form-inline' action="/" method="post"><!-- {% csrf_token %} -->
+            <form class='form-inline' action="/" method="post">
             <div class="form-group">
               <select id="id_currency" class="form-control" name="currency">
                 <option value="USD">USD</option>
@@ -22,11 +22,16 @@
             <div class="form-group">
               <input id="id_amount" class="form-control" name="amount" step="any" type="number" placeholder="10" required/>
             </div>
+            <div class="checkbox">
+              <label>
+                <input id="id_redirect" name="redirect" type="checkbox">
+                Redirect on payment
+              </label>
+            </div>
           <button type="submit" class="btn btn-default">Create</button>
           </form>          
           
           </div>
-          
           <? if ($error): ?>
           <div class="alert alert-danger alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -59,7 +64,3 @@
   </body>
 </html>
 
-
-
-<?php
-?>

@@ -15,15 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 				    // Yellow API url to create an invoice
 				    // The Yellow server to use (e.g. yellowpay.co) will provided 
 				    // when you register
-    $url = "http://" . getenv("YELLOW_SERVER") . "/api/invoice/";
+				    $yellow_server = "http://" . getenv("YELLOW_SERVER");
+    $url = $yellow_server . "/api/invoice/";
     // POST /api/invoice/ expects a base price, currency, and optional
     // callback.
 								    $callback = getenv("ROOT_URL") . "/ipn.php";
+
     $data = array(
        "base_price" => safe($_POST["amount"]), 
        "base_ccy"   => safe($_POST["currency"]),
        "callback"   => $callback
     );
+																    if (safe($_POST["redirect"])) {
+												    	    $data["redirect"] = getenv("ROOT_URL") . "/success.php";
+																    }
 	
 	    // ---
 	    // The following section handles authentication
