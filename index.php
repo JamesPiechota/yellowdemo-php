@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 				    // Yellow API url to create an invoice
 				    // The Yellow server to use (e.g. yellowpay.co) will provided 
 				    // when you register
-				    $yellow_server = "http://" . getenv("YELLOW_SERVER");
+				    $yellow_server = "https://" . getenv("YELLOW_SERVER");
     $url = $yellow_server . "/api/invoice/";
     // POST /api/invoice/ expects a base price, currency, and optional
     // callback.
