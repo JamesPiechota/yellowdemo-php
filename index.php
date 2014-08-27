@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $url = $yellow_server . "/api/invoice/";
     // POST /api/invoice/ expects a base price, currency, and optional
     // callback.
+    // ROOT_URL should refer to a server you control
 								    $callback = getenv("ROOT_URL") . "/ipn.php";
 
     $data = array(
