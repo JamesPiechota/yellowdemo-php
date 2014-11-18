@@ -6,12 +6,13 @@
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     include("create.php");
 } else {
+			    include("authentication.php");
 	    // Load the API Key and Secret from an environment variable (it's
 	    // recommended, for security reasons, not to hardcode the credentials
 	    // in a source file)
 		    $private_key = getenv("YELLOW_SECRET");
-    $public_key  = getenv("YELLOW_API_KEY");
-	
+    $public_key = getenv("YELLOW_API_KEY"); 
+
 				    // Yellow API url to create an invoice
 				    // The Yellow server to use (e.g. yellowpay.co) will provided 
 				    // when you register
@@ -34,22 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 												    	    $data["redirect"] = getenv("ROOT_URL") . "/success.php";
 																    }
 	
-	    // ---
-	    // The following section handles authentication
-	    // ---
 	
 		    // Current time in milliesconds
 		    // The nonce must be an always increasing integer (each request must have
 		    // a unique nonce that is higher than all previous nonces). Using the
 		    // current time is an easy way to do this.
     $nonce = round(microtime(true) * 1000);
-
 	    // Encode the POST payload as json (this is required)
     $body = json_encode($data); 
-				    // Build the message to be signed (this is required)
-    $message = $nonce . $url . $body ;
 				    // Sign the message using a sha256 HMAC hash (this is required)
-    $signature = hash_hmac("sha256",$message, $private_key ,false);
+    $signature = get_signature($private_key, $url, $nonce, $body);
 
      // Build the POST request including the API key, nonce, and signature
      // in the the headers
@@ -78,11 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 									    }
 }
 
-function safe($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
+
 
 ?>
