@@ -6,7 +6,7 @@
       function invoiceListener(event) {
         // For additional security, confirm the message originated from the
         // embedded invoice
-        if (event.origin !== "<?php echo $yellow_server; ?>") {
+        if (!preg_match('\.yellowpay\.co$',event.origin)) {
           alert("Received message from unexpected domain: " + event.origin);
           return;
         }
