@@ -16,8 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 } else {
     include("authentication.php");
     $data = json_decode($HTTP_RAW_POST_DATA);
-				    error_log(file_get_contents('php://input'));
-				    error_log($HTTP_RAW_POST_DATA);
     $invoice = safe($data->{"id"});
     $status = safe($data->{"status"});
     $signature = safe($_SERVER["HTTP_API_SIGN"]);
@@ -29,11 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $url,
                                     $nonce,
                                     $HTTP_RAW_POST_DATA);
-																																				    error_log($nonce);
-																																				    error_log($signature);
-																																								    error_log($test_signature);
-																																												    error_log($url);
-
     if ($signature != $test_signature) {
         // If signatures are not the same, that means it could be a malicious
         // request: reject it. 
