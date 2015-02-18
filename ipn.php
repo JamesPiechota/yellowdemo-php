@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 } else {
     include("authentication.php");
     $data = json_decode($HTTP_RAW_POST_DATA);
-				    var_dump($data);
+				    error_log($HTTP_RAW_POST_DATA);
+				    error_log($data);
     $invoice = safe($data->{"id"});
     $status = safe($data->{"status"});
     $signature = safe($_SERVER["HTTP_API_SIGN"]);
@@ -28,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $url,
                                     $nonce,
                                     $HTTP_RAW_POST_DATA);
+																																				    error_log($nonce);
 																																				    error_log($signature);
 																																								    error_log($test_signature);
 																																												    error_log($url);
