@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 } else {
     include("authentication.php");
     $data = json_decode($HTTP_RAW_POST_DATA);
+				    var_dump($data);
     $invoice = safe($data->{"id"});
     $status = safe($data->{"status"});
     $signature = safe($_SERVER["HTTP_API_SIGN"]);
@@ -27,17 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $url,
                                     $nonce,
                                     $HTTP_RAW_POST_DATA);
+																																				    error_log($signature);
+																																								    error_log($test_signature);
+																																												    error_log($url);
 
     if ($signature != $test_signature) {
         // If signatures are not the same, that means it could be a malicious
         // request: reject it. 
         http_response_code(403);
-    }
-
-    if ("authorizing" == $status) {
+    } else if ("authorizing" == $status) {
         error_log("Order is 'pending confirmation', redirecting customer to order complete page.");
+								        http_response_code(200);
     } else if ("paid" == $status) {
         error_log("Order is 'complete', shipping product to customer.");
+										        http_response_code(200);
     } else {
         http_response_code(400);
     }
