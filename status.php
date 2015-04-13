@@ -21,7 +21,7 @@ $status = $y->checkInvoiceStatus($id); ?>
             <div class="inner cover">
                 <h1 class="cover-heading">Invoice payment detected</h1>
                 <div align="center"
-                     style="width:393px; height:220px; overflow:hidden; border:none; margin:auto; display:block; padding-top:30px;">
+                     style="width:393px; height:22px; overflow:hidden; border:none; margin:auto; display:block; padding-top:30px;">
                     <a href="/">New invoice</a>
                 </div>
                 <div class="center">

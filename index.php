@@ -14,7 +14,7 @@
             <div class="inner cover">
                 <h1 class="cover-heading">Create an invoice:</h1>
 
-                <form class='form-inline' action="/" method="post">
+                <form class='form-inline' action="invoice.php" method="post">
                     <div class="form-group">
                         <select id="id_currency" class="form-control" name="currency">
                             <option value="USD">USD</option>

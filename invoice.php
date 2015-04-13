@@ -6,14 +6,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):?>
     include("keys.php");
     $yellow   = new Invoice($api_key, $api_secret);
     $amount   = (float) htmlentities($_POST["amount"]);
-    $currency = (float) htmlentities($_POST["currency"]);
-    $callback = "http://mediacity.co/sdk/sample/ipn.php";
+    $currency =  htmlentities($_POST["currency"]);
+    $callback = "http://yourdomain.local/sdk/sample/ipn.php";
     $invoice = $yellow->createInvoice($amount, $currency , $callback);?>
     <!DOCTYPE HTML>
     <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script>invoice page</script>
+        <title>invoice page</title>
         <script>
             function invoiceListener(event) {
                 switch (event.data) {
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):?>
         <span style="padding-left: 10px">Invoice status: <span id="status">new</span></span>
     </div>
     <div align="center" style="width:393px; height:220px; overflow:hidden; border:none; margin:auto; display:block; padding-top:30px;">
-        <a style="color: black;text-decoration: none; font-family: Arial, sans-serif; font-weight: bold;" href="/">New invoice</a>
+        <a style="color: black;text-decoration: none; font-family: Arial, sans-serif; font-weight: bold;" href="index.php">New invoice</a>
     </div>
     </body>
     </html>
