@@ -1,78 +1,68 @@
-<?php
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/demo.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <title>create invoice</title>
+</head>
+<body>
+<div class="site-wrapper">
+    <div class="site-wrapper-inner">
+        <div class="cover-container">
+            <div class="inner cover">
+                <h1 class="cover-heading">Create an invoice:</h1>
 
-// This file contains a simple examples for how a merchant might communicate
-// with Yellow as part of their shopping cart.
+                <form class='form-inline' action="/" method="post">
+                    <div class="form-group">
+                        <select id="id_currency" class="form-control" name="currency">
+                            <option value="USD">USD</option>
+                            <option value="AED">AED</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input id="id_amount" class="form-control" name="amount" step="any" type="number"
+                               placeholder="10" required/>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="id_redirect" name="redirect" type="checkbox">
+                            Redirect on payment
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">Create</button>
+                </form>
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    include("create.php");
-} else {
-			    include("authentication.php");
-	    // Load the API Key and Secret from an environment variable (it's
-	    // recommended, for security reasons, not to hardcode the credentials
-	    // in a source file)
-		    $private_key = getenv("YELLOW_SECRET");
-    $public_key = getenv("YELLOW_API_KEY"); 
+            </div>
+            <?php if ($error): ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Error</strong> <?php echo $error; ?>
+                </div>
+            <?php endif; ?>
 
-				    // Yellow API url to create an invoice
-				    // The Yellow server to use (e.g. yellowpay.co) will provided 
-				    // when you register
-				    // Note: all Yellow URLs must be 'https' - since Yellow will redirect 
-		    // http to https, using an http:// URL may cause authentication
-    // to fail
-				    $yellow_server = "https://" . getenv("YELLOW_SERVER");
-    $url = $yellow_server . "/api/invoice/";
-    // POST /api/invoice/ expects a base price, currency, and optional
-    // callback.
-    // ROOT_URL should refer to a server you control
-								    $callback = getenv("ROOT_URL") . "/ipn.php";
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>Demo powered by <a href="https://yellowpay.co">Yellow</a></p>
+                </div>
+            </div>
 
-    $data = array(
-       "base_price" => safe($_POST["amount"]), 
-       "base_ccy"   => safe($_POST["currency"]),
-       "callback"   => $callback
-    );
-																    if (safe($_POST["redirect"])) {
-												    	    $data["redirect"] = getenv("ROOT_URL") . "/success.php";
-																    }
-	
-	
-		    // Current time in milliesconds
-		    // The nonce must be an always increasing integer (each request must have
-		    // a unique nonce that is higher than all previous nonces). Using the
-		    // current time is an easy way to do this.
-    $nonce = round(microtime(true) * 1000);
-	    // Encode the POST payload as json (this is required)
-    $body = json_encode($data); 
-				    // Sign the message using a sha256 HMAC hash (this is required)
-    $signature = get_signature($private_key, $url, $nonce, $body);
+        </div>
 
-     // Build the POST request including the API key, nonce, and signature
-     // in the the headers
-     $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/json\r\n" .
-        							                 "API-Key: " . $public_key . "\r\n" .
-        							                 "API-Nonce: " . $nonce . "\r\n" .
-        							                 "API-Sign: " . $signature . "\r\n",
-            'method'  => 'POST',
-            'content' => $body,
-        ),
-    );
-				
-				    // Issue the request and check the response
-    $context  = stream_context_create($options);
-    $json_result = @file_get_contents($url, false, $context);
-				    list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
-    if ("200" == $status_code) {
-    	    $result = json_decode($json_result);
-					        $invoice_url = $result->url;
-									        include("invoice.php");
-				    } else {
-				        $error = $http_response_header[0];
-												        include("create.php"); 	   
-									    }
-}
+    </div>
 
+</div>
 
+<div class="container">
+    <div class="row">
+        <div class="center-block" style="width:350px;">
 
-?>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>
