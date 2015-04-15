@@ -19,23 +19,36 @@
                         <select id="id_currency" class="form-control" name="currency">
                             <option value="USD">USD</option>
                             <option value="AED">AED</option>
+                            <option value="BHD">BHD</option>
+                            <option value="DZD">DZD</option>
+                            <option value="EGP">EGP</option>
+                            <option value="IQD">IQD</option>
+                            <option value="JOD">JOD</option>
+                            <option value="KWD">KWD</option>
+                            <option value="LBP">LBP</option>
+                            <option value="MAD">MAD</option>
+                            <option value="OMR">OMR</option>
+                            <option value="QAR">QAR</option>
+                            <option value="SAR">SAR</option>
+                            <option value="TND">TND</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <input id="id_amount" class="form-control" name="amount" step="any" type="number"
                                placeholder="10" required/>
                     </div>
-                    <div class="checkbox">
-                        <label>
-                            <input id="id_redirect" name="redirect" type="checkbox">
-                            Redirect on payment
-                        </label>
+                    <div class="form-group">
+                        <select id="id_type" class="form-control" name="type">
+                            <option value="embedded" selected="selected">Embedded Cart</option>
+                            <option value="fullscreen">Fullscreen Cart</option>
+                            <option value="link">Link</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-default">Create</button>
                 </form>
 
             </div>
-            <?php if ($error): ?>
+            <?php if ( isset($error) && $error ): ?>
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <strong>Error</strong> <?php echo $error; ?>

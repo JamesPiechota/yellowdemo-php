@@ -6,9 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):?>
     include("keys.php");
     $yellow   = new Invoice($api_key, $api_secret);
     $amount   = (float) htmlentities($_POST["amount"]);
-    $currency =  htmlentities($_POST["currency"]);
+    $currency = htmlentities($_POST["currency"]);
     $callback = "http://yourdomain.local/sdk/sample/ipn.php";
-    $invoice = $yellow->createInvoice($amount, $currency , $callback);?>
+    $type = htmlentities($_POST["type"]);
+    $invoice = $yellow->createInvoice( array('amount'=>$amount, 'currency'=>$currency, 'callback'=>$callback, 'type'=>$type) );
+?>
     <!DOCTYPE HTML>
     <html>
     <head>
