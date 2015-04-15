@@ -1,45 +1,21 @@
 <?php
-
-
-// Entry point for the IPN callback. An example approach would be to:
-// 1. Grab the invoice id and status from the POST request
-// 2. Query the order management system for an order matching the invoice
-// 3a. If the status is 'unconfirmed' flag the order as
-//     'pending confirmation' and redirect the customer to an order
-//     complete page
-// 3b. If the status is 'paid' flag th order as 'complete' and ship the
-//     the product
-    
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // ipn should only be POSTed
-    http_response_code(400);
-} else {
-    include("authentication.php");
-    $data = json_decode($HTTP_RAW_POST_DATA);
-    $invoice = safe($data->{"id"});
-    $status = safe($data->{"status"});
-    $signature = safe($_SERVER["HTTP_API_SIGN"]);
-    $nonce = safe($_SERVER["HTTP_API_NONCE"]);
-    $private_key = getenv("YELLOW_SECRET");
-    $url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-    $test_signature = get_signature($private_key,
-                                    $url,
-                                    $nonce,
-                                    $HTTP_RAW_POST_DATA);
-    if ($signature != $test_signature) {
-        // If signatures are not the same, that means it could be a malicious
-        // request: reject it. 
-        http_response_code(403);
-    } else if ("authorizing" == $status) {
-        error_log("Order is 'pending confirmation', redirecting customer to order complete page.");
-								        http_response_code(200);
-    } else if ("paid" == $status) {
-        error_log("Order is 'complete', shipping product to customer.");
-										        http_response_code(200);
-    } else {
-        http_response_code(400);
-    }
+include "vendor/autoload.php";
+use Yellow\Bitcoin\Invoice;
+include("keys.php");
+$yellow     = new Invoice($api_key,$api_secret);
+$body       = file_get_contents("php://input") ;
+$url        = $yellow->getCurrentUrl(); //// or you can use your own method
+$sign       = $_SERVER["HTTP_API_SIGN"];
+$api_key    = $_SERVER["HTTP_API_KEY"];
+$nonce      = $_SERVER["HTTP_API_NONCE"];
+$isValidIPN = $yellow->verifyIPN($url,$sign,$api_key,$nonce,$body); //bool
+$log_file   = "ipn.log";
+if($isValidIPN){
+    file_put_contents($log_file , "is valid IPN call\n " , FILE_APPEND);
+    /// you can update your order , log to db , send email etc
+    header("HTTP/1.0 200 OK");
+}else{
+    file_put_contents($log_file , "is invalid IPN call\n " , FILE_APPEND);
+    /// invalid/ fake IPN , no need to do anything
+    header("HTTP/1.1 403 Unauthorized");
 }
-
-?>

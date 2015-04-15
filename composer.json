@@ -1,1 +1,14 @@
-{}
+{
+    "name": "yellow/yellowdemo-php",
+    "require": {
+        "yellow/php-sdk": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tawfek Daghistani",
+            "email": "tawfekov@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
