@@ -9,7 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):?>
     $currency = htmlentities($_POST["currency"]);
     $callback = "http://yourdomain.local/sdk/sample/ipn.php";
     $type = htmlentities($_POST["type"]);
-    $invoice = $yellow->createInvoice( array('amount'=>$amount, 'currency'=>$currency, 'callback'=>$callback, 'type'=>$type) );
+    $payload = array(
+        'base_price'=> $amount,
+        'base_ccy'  => $currency,
+        'callback'  => $callback,
+        'type'      => $type
+    );
+    $invoice = $yellow->createInvoice( $payload );
 ?>
     <!DOCTYPE HTML>
     <html>
