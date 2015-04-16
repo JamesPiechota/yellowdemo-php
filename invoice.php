@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):?>
                         // Handle the invoice status update
                         document.getElementById("status").innerHTML=event.data;
                         alert("your payment is authorizing");
-                        window.location = "status.php?id=<?php echo $invoice["id"];?>";
+                        window.location = "status.php?id=<?php echo $invoice['id'];?>";
                         break;
                     case "expired":
                     case "refund_requested":
